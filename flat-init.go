@@ -9,8 +9,6 @@ import (
 	"os"
 	"sort"
 	"sync"
-
-	"github.com/disintegration/gift"
 )
 
 func check(e error) {
@@ -74,21 +72,8 @@ func main() {
 	}
 	wg.Wait()
 
-	var dst image.Image
-	if false {
-		fmt.Println("Resizing and blurring")
-		g := gift.New(
-			gift.Resize(boundsMax.X, boundsMax.Y, gift.LinearResampling),
-			gift.GaussianBlur(65.0))
-		resized := image.NewRGBA(g.Bounds(flat.Bounds()))
-		g.Draw(resized, flat)
-		dst = resized
-	} else {
-		dst = flat
-	}
-
 	writer, err := os.OpenFile(dstPath, os.O_WRONLY|os.O_CREATE, 0600)
 	check(err)
 	//jpeg.Encode(writer, proxy, nil)
-	png.Encode(writer, dst)
+	png.Encode(writer, flat)
 }
